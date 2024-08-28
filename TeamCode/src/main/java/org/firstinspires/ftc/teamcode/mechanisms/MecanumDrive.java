@@ -1,21 +1,28 @@
 package org.firstinspires.ftc.teamcode.mechanisms;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 public class MecanumDrive {
-    private DcMotor frontLeftMotor;
-    private DcMotor frontRightMotor;
-    private DcMotor backLeftMotor;
-    private DcMotor backRightMotor;
+    private DcMotorEx frontLeftMotor;
+    private DcMotorEx frontRightMotor;
+    private DcMotorEx backLeftMotor;
+    private DcMotorEx backRightMotor;
+    private DcMotorEx[] motors;
 
     public void init(HardwareMap hardwareMap) {
-        frontLeftMotor = hardwareMap.dcMotor.get("front_left_motor");
-        frontRightMotor = hardwareMap.dcMotor.get("front_right_motor");
-        backLeftMotor = hardwareMap.dcMotor.get("back_left_motor");
-        backRightMotor = hardwareMap.dcMotor.get("back_right_motor");
+        frontLeftMotor = hardwareMap.get(DcMotorEx.class, "front_left_motor");
+        frontRightMotor = hardwareMap.get(DcMotorEx.class, "front_right_motor");
+        backLeftMotor = hardwareMap.get(DcMotorEx.class, "back_left_motor");
+        backRightMotor = hardwareMap.get(DcMotorEx.class, "back_right_motor");
 
-        backLeftMotor.setDirection(DcMotor.Direction.REVERSE);
-        frontLeftMotor.setDirection(DcMotor.Direction.REVERSE);
+        backLeftMotor.setDirection(DcMotorEx.Direction.REVERSE);
+        frontLeftMotor.setDirection(DcMotorEx.Direction.REVERSE);
+
+        motors = new DcMotorEx[]{frontLeftMotor, backLeftMotor, frontRightMotor, backRightMotor};
+        for (DcMotorEx motor : motors) {
+            motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        }
     }
 
     private void setPowers(double frontLeftPower, double frontRightPower, double backLeftPower, double backRightPower) {
